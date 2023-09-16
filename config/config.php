@@ -1,4 +1,4 @@
 <?php
 // config.php
 
-define('API_KEY', 'Syaifull');
+define('API_KEY', 'ifull');
