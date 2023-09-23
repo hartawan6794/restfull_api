@@ -40,6 +40,9 @@ if ($access) {
 	} else if ($url === 'login') {
 		if ($method === 'POST') getLogin();
 		else echo json_encode(array('message' => 'Not Found'));
+	} else if ($url === 'register') {
+		if ($method === 'POST') postRegister();
+		else echo json_encode(array('message' => 'Not Found'));
 	} else {
 
 		http_response_code(404);

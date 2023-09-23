@@ -348,3 +348,51 @@ function getLogin()
 	mysqli_close($koneksi);
 	echo json_encode($response);
 }
+
+function postRegister()
+{
+
+	global $koneksi;
+	$response = array();
+
+	$requestPayload = file_get_contents('php://input');
+	$data = json_decode($requestPayload, true);
+
+	$email_user = $data['email_user'];
+	$pass = password_hash($data['password'], PASSWORD_BCRYPT);
+	$device_id = $data['device_id'];
+	$token_notification = $data['token_notification'];
+	$telpon = $data['telpon'];
+	$created_at = date('Y-m-d H:i:s');
+
+	$nm_user = $data['nm_user'];
+
+	// Mulai transaksi
+	$koneksi->autocommit(FALSE);
+
+	$sqlInsertUser = "INSERT INTO tbl_user VALUES(null,'$email_user','$pass','$device_id','$token_notification','$telpon','1','$created_at',null)";
+	// var_dump($sqlInsertUser);die;
+
+	if ($koneksi->query($sqlInsertUser) === TRUE) {
+		$insert_id = $koneksi->insert_id;
+		$sqlInsertUserDetail = "INSERT INTO tbl_user_detail(id_user_detail,nm_user) VALUES($insert_id,'$nm_user')";
+		if ($koneksi->query($sqlInsertUserDetail) === TRUE) {
+			$koneksi->commit();
+			$response['status'] = true;
+			$response['message'] = "Berhasil menambahkan data";
+		} else {
+			// Jika pernyataan kedua gagal, rollback transaksi
+			$koneksi->rollback();
+			$response['status'] = false;
+			$response['message'] = "Error user Detail: " . $sqlInsertUserDetail . "<br>" . $koneksi->error;
+		}
+	} else {
+        // Jika pernyataan kedua gagal, rollback transaksi
+        $koneksi->rollback();
+		$response['status'] = false;
+		$response['message'] = "Error User: " . $sqlInsertUser . "<br>" . $koneksi->error;
+	}
+
+	mysqli_close($koneksi);
+	echo json_encode($response);
+}
