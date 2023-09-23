@@ -358,14 +358,14 @@ function postRegister()
 	$requestPayload = file_get_contents('php://input');
 	$data = json_decode($requestPayload, true);
 
-	$email_user = $_POST['email_user'];
-	$pass = password_hash($_POST['password'], PASSWORD_BCRYPT);
-	$device_id = $_POST['device_id'];
-	$token_notification = $_POST['token_notification'];
-	$telpon = $_POST['telpon'];
+	$email_user = $data['email_user'];
+	$pass = password_hash($data['password'], PASSWORD_BCRYPT);
+	$device_id = $data['device_id'];
+	$token_notification = $data['token_notification'];
+	$telpon = $data['telpon'];
 	$created_at = date('Y-m-d H:i:s');
 
-	$nm_user = $_POST['nm_user'];
+	$nm_user = $data['nm_user'];
 
 	// Mulai transaksi
 	$koneksi->autocommit(FALSE);
