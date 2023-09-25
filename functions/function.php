@@ -323,8 +323,8 @@ function getLogin()
 	$requestPayload = file_get_contents('php://input');
 	$data = json_decode($requestPayload, true);
 
-	$email_user = $_POST['email'];
-	$pass = $_POST['password'];
+	$email_user = $data['email'];
+	$pass = $data['password'];
 	// var_dump($email_user);die;
 	//$pass_hash = password_hash($pass, PASSWORD_BCRYPT);
 	$sql = "SELECT id_user,emaiL_user,tu.password,tud.nm_user as device_id FROM tbl_user tu inner join tbl_user_detail tud on tu.id_user = tud.id_user_detail 
