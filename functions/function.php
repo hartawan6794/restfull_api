@@ -371,26 +371,35 @@ function postRegister()
 	$koneksi->autocommit(FALSE);
 
 	$sqlInsertUser = "INSERT INTO tbl_user VALUES(null,'$email_user','$pass','$device_id','$token_notification','$telpon','1','$created_at',null)";
-	// var_dump($sqlInsertUser);die;
 
-	if ($koneksi->query($sqlInsertUser) === TRUE) {
-		$insert_id = $koneksi->insert_id;
-		$sqlInsertUserDetail = "INSERT INTO tbl_user_detail(id_user_detail,nm_user) VALUES($insert_id,'$nm_user')";
-		if ($koneksi->query($sqlInsertUserDetail) === TRUE) {
-			$koneksi->commit();
-			$response['status'] = true;
-			$response['message'] = "Berhasil menambahkan data";
+	//cek email atau user
+	$sqlCekEmail = "SELECT email_user from tbl_user WHERE email_user = '$email_user'";
+	$data = mysqli_query($koneksi, $sqlCekEmail);
+	$value = mysqli_fetch_all($data, MYSQLI_ASSOC);
+
+	if (!$value) {
+		if ($koneksi->query($sqlInsertUser) === TRUE) {
+			$insert_id = $koneksi->insert_id;
+			$sqlInsertUserDetail = "INSERT INTO tbl_user_detail(id_user_detail,nm_user) VALUES($insert_id,'$nm_user')";
+			if ($koneksi->query($sqlInsertUserDetail) === TRUE) {
+				$koneksi->commit();
+				$response['status'] = true;
+				$response['message'] = "Berhasil menambahkan data";
+			} else {
+				// Jika pernyataan kedua gagal, rollback transaksi
+				$koneksi->rollback();
+				$response['status'] = false;
+				$response['message'] = "Error user Detail: " . $sqlInsertUserDetail . "<br>" . $koneksi->error;
+			}
 		} else {
 			// Jika pernyataan kedua gagal, rollback transaksi
 			$koneksi->rollback();
 			$response['status'] = false;
-			$response['message'] = "Error user Detail: " . $sqlInsertUserDetail . "<br>" . $koneksi->error;
+			$response['message'] = "Error User: " . $sqlInsertUser . "<br>" . $koneksi->error;
 		}
 	} else {
-        // Jika pernyataan kedua gagal, rollback transaksi
-        $koneksi->rollback();
 		$response['status'] = false;
-		$response['message'] = "Error User: " . $sqlInsertUser . "<br>" . $koneksi->error;
+		$response['message'] = "Email sudah terdaftar";
 	}
 
 	mysqli_close($koneksi);
