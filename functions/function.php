@@ -358,11 +358,11 @@ function postRegister()
 	$requestPayload = file_get_contents('php://input');
 	$data = json_decode($requestPayload, true);
 
-	$email_user = $data['modeluUser']['email_user'];
-	$pass = password_hash($data['modeluUser']['password'], PASSWORD_BCRYPT);
-	$device_id = $data['modeluUser']['device_id'];
-	$token_notification = $data['modeluUser']['token_notification'];
-	$telpon = $data['modeluUser']['telpon'];
+	$email_user = $data['modelUser']['email_user'];
+	$pass = password_hash($data['modelUser']['password'], PASSWORD_BCRYPT);
+	$device_id = $data['modelUser']['device_id'];
+	$token_notification = $data['modelUser']['token_notification'];
+	$telpon = $data['modelUser']['telpon'];
 	$created_at = date('Y-m-d H:i:s');
 
 	$nm_user = $data['modelUserDetail']['nm_user'];
@@ -377,7 +377,7 @@ function postRegister()
 	$data = mysqli_query($koneksi, $sqlCekEmail);
 	$value = mysqli_fetch_all($data, MYSQLI_ASSOC);
 
-	if (!$value) {
+	if ($value == null) {
 		if ($koneksi->query($sqlInsertUser) === TRUE) {
 			$insert_id = $koneksi->insert_id;
 			$sqlInsertUserDetail = "INSERT INTO tbl_user_detail(id_user_detail,nm_user) VALUES($insert_id,'$nm_user')";
