@@ -121,7 +121,7 @@ function insertPermohonan()
 
 	global $koneksi;
 	// "INSERT INTO `tbl_pelanggan` (`id_pelanggan`, `id_user`, `nik_user`, `nm_user`, `tanggal_lahir`, `tempat_lahir`, `telpon`, `alamat`, `img_identitas`, `created_at`, `updated_at`, `id_paket`, `gender`, `status`, `id_alamat`) VALUE(null,'$id_user','$nik','$nm_lengkap','$tgl_lahir','$tmp_lahir','$telpon','$alamat','$img','$created_at',null,'$id_paket','$gender','0','$id_alamat')";
-	$sql = $langganan == 0 ? "INSERT INTO tbl_pelanggan VALUE(null,'$id_user','$nik','$nm_user','$tgl_lahir','$tmp_lahir','$telpon','$alamat','$img','$created_at',null,'$id_paket','$gender','0','$id_alamat')" : "INSERT INTO tbl_pelanggan VALUE(null,'$id_user','$nik','$nm_user','$tgl_lahir','$tmp_lahir','$telpon','$alamat','$img','$created_at',null,'$id_paket','$gender','4','$id_alamat')";
+	$sql = $langganan == 0 ? "INSERT INTO tbl_pelanggan VALUE(null,'$id_user','$nik','$nm_user','$tgl_lahir','$tmp_lahir','$telpon','$alamat','$gender','$img','0','$id_alamat','$id_paket','$created_at',null)" : "INSERT INTO tbl_pelanggan VALUEnull,'$id_user','$nik','$nm_user','$tgl_lahir','$tmp_lahir','$telpon','$alamat','$gender','$img','4','$id_alamat','$id_paket','$created_at',null)";
 
 	if ($koneksi->query($sql)) {
 		$response['status'] = true;
