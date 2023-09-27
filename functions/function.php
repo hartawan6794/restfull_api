@@ -121,7 +121,7 @@ function insertPermohonan()
 
 	global $koneksi;
 	// "INSERT INTO `tbl_pelanggan` (`id_pelanggan`, `id_user`, `nik_user`, `nm_user`, `tanggal_lahir`, `tempat_lahir`, `telpon`, `alamat`, `img_identitas`, `created_at`, `updated_at`, `id_paket`, `gender`, `status`, `id_alamat`) VALUE(null,'$id_user','$nik','$nm_lengkap','$tgl_lahir','$tmp_lahir','$telpon','$alamat','$img','$created_at',null,'$id_paket','$gender','0','$id_alamat')";
-	$sql = $langganan == 0 ? "INSERT INTO tbl_pelanggan VALUE(null,'$id_user','$nik','$nm_user','$tgl_lahir','$tmp_lahir','$telpon','$alamat','$img','$created_at',null,'$id_paket','$gender','0','$id_alamat')" : "INSERT INTO tbl_pelanggan VALUE(null,'$id_user','$nik','$nm_user','$tgl_lahir','$tmp_lahir','$telpon','$alamat','$img','$created_at',null,'$id_paket','$gender','4','$id_alamat')";
+	$sql = $langganan == 0 ? "INSERT INTO tbl_pelanggan VALUE(null,'$id_user','$nik','$nm_user','$tgl_lahir','$tmp_lahir','$telpon','$alamat','$gender','$img','0','$id_alamat','$id_paket','$created_at',null)" : "INSERT INTO tbl_pelanggan VALUEnull,'$id_user','$nik','$nm_user','$tgl_lahir','$tmp_lahir','$telpon','$alamat','$gender','$img','4','$id_alamat','$id_paket','$created_at',null)";
 
 	if ($koneksi->query($sql)) {
 		$response['status'] = true;
@@ -315,7 +315,7 @@ function getPembayaran()
 }
 
 function getLogin()
-{	
+{
 
 	global $koneksi;
 	$response = array();
@@ -403,6 +403,40 @@ function postRegister()
 		$response['status'] = false;
 		$response['message'] = "Email sudah terdaftar";
 	}
+
+	mysqli_close($koneksi);
+	echo json_encode($response);
+}
+
+function get_user_profile()
+{
+	global $koneksi;
+
+	$response = array();
+
+	$id_user = $_GET['id_user'];
+	$type = $_GET['type'];
+
+	if($type === 'user_bio'){
+		$sql = "SELECT * FROM tbl_user tu INNER JOIN tbl_user_detail tud ON tu.id_user = tud.id_user WHERE tu.id_user = '$id_user'";
+	}else if($type === 'pelanggan'){
+		$sql = "SELECT * FROM tbl_pelanggan WHERE id_user = '$id_user'";
+	}
+
+	// $sql = "SELECT tu.id_user,tu.email_user,tu.telpon,tud.nik,tud.nm_user,tud.tgl_lahir,tud.tmp_lahir,tud.jns_kelamin,tud.img_user,tp.id_pelanggan,tp.nik_user,tp.nm_user,tp.tanggal_lahir,tp.tempat_lahir,tp.alamat,tp.gender,tp.img_identitas,tp.id_alamat,tp.id_paket,tp.status FROM tbl_user tu inner join tbl_user_detail tud on tu.id_user = tud.id_user_detail inner join tbl_pelanggan tp on tp.id_user = tu.id_user WHERE tu.id_user = '$id_user'";
+	// var_dump($sql);die;
+	$data = mysqli_query($koneksi, $sql);
+	$value = mysqli_fetch_all($data, MYSQLI_ASSOC);
+
+	if ($value) {
+		$response['status'] = true;
+		$response['message'] = "Data berhasil didapatkan";
+		$response['result'] = $value;
+	} else {
+		$response['status'] = false;
+		$response['message'] = "Data gagal didapatkan";
+	}
+
 
 	mysqli_close($koneksi);
 	echo json_encode($response);
