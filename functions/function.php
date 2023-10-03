@@ -417,14 +417,12 @@ function get_user_profile()
 	$id_user = $_GET['id_user'];
 	$type = $_GET['type'];
 
-	if($type === 'user_bio'){
-		$sql = "SELECT * FROM tbl_user tu INNER JOIN tbl_user_detail tud ON tu.id_user = tud.id_user WHERE tu.id_user = '$id_user'";
-	}else if($type === 'pelanggan'){
+	if($type == 'user_bio'){
+		$sql = "SELECT * FROM tbl_user tu INNER JOIN tbl_user_detail tud ON tu.id_user = tud.id_user_detail WHERE tu.id_user = '$id_user'";
+	}else if($type == 'pelanggan'){
 		$sql = "SELECT * FROM tbl_pelanggan WHERE id_user = '$id_user'";
 	}
 
-	// $sql = "SELECT tu.id_user,tu.email_user,tu.telpon,tud.nik,tud.nm_user,tud.tgl_lahir,tud.tmp_lahir,tud.jns_kelamin,tud.img_user,tp.id_pelanggan,tp.nik_user,tp.nm_user,tp.tanggal_lahir,tp.tempat_lahir,tp.alamat,tp.gender,tp.img_identitas,tp.id_alamat,tp.id_paket,tp.status FROM tbl_user tu inner join tbl_user_detail tud on tu.id_user = tud.id_user_detail inner join tbl_pelanggan tp on tp.id_user = tu.id_user WHERE tu.id_user = '$id_user'";
-	// var_dump($sql);die;
 	$data = mysqli_query($koneksi, $sql);
 	$value = mysqli_fetch_all($data, MYSQLI_ASSOC);
 
