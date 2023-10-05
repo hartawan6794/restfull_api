@@ -417,11 +417,37 @@ function get_user_profile()
 	$id_user = $_GET['id_user'];
 	$type = $_GET['type'];
 
-	if($type == 'user_bio'){
+	if ($type == 'user_bio') {
 		$sql = "SELECT * FROM tbl_user tu INNER JOIN tbl_user_detail tud ON tu.id_user = tud.id_user_detail WHERE tu.id_user = '$id_user'";
-	}else if($type == 'pelanggan'){
+	} else if ($type == 'pelanggan') {
 		$sql = "SELECT * FROM tbl_pelanggan WHERE id_user = '$id_user'";
 	}
+
+	$data = mysqli_query($koneksi, $sql);
+	$value = mysqli_fetch_all($data, MYSQLI_ASSOC);
+
+	if ($value) {
+		$response['status'] = true;
+		$response['message'] = "Data berhasil didapatkan";
+		$response['result'] = $value;
+	} else {
+		$response['status'] = false;
+		$response['message'] = "Data gagal didapatkan";
+	}
+
+
+	mysqli_close($koneksi);
+	echo json_encode($response);
+}
+
+function get_banner()
+{
+	global $koneksi;
+
+	$response = array();
+
+
+	$sql = "SELECT * FROM tbl_banner_informasi limit 4";
 
 	$data = mysqli_query($koneksi, $sql);
 	$value = mysqli_fetch_all($data, MYSQLI_ASSOC);
