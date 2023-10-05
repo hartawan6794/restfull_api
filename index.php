@@ -46,7 +46,10 @@ if ($access) {
 	} else if ($url === 'user_profile') {
 		if ($method === 'GET') get_user_profile();
 		else echo json_encode(array('message' => 'Not Found'));
-	} else {
+	} else if ($url === 'banner') {
+		if ($method === 'GET') get_banner();
+		else echo json_encode(array('message' => 'Not Found'));
+	}else {
 		http_response_code(404);
 		echo json_encode(array("message" => "Not Found"));
 	}
