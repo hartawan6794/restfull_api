@@ -80,7 +80,7 @@ function getPermohonan()
 
 	$id_user = $_GET['id_user'];
 
-	$sql = "SELECT * FROM tbl_pelanggan where id_user = '$id_user'";
+	$sql = "SELECT * FROM tbl_pelanggan tp inner join tbl_paket tpak on tpak.id_paket = tp.id_paket where id_user = '$id_user' ";
 	//var_dump($sql);die;
 
 	$data = mysqli_query($koneksi, $sql);
@@ -420,7 +420,7 @@ function get_user_profile()
 	if ($type == 'user_bio') {
 		$sql = "SELECT * FROM tbl_user tu INNER JOIN tbl_user_detail tud ON tu.id_user = tud.id_user_detail WHERE tu.id_user = '$id_user'";
 	} else if ($type == 'pelanggan') {
-		$sql = "SELECT * FROM tbl_pelanggan WHERE id_user = '$id_user'";
+		$sql = "SELECT * FROM tbl_pelanggan tp inner join tbl_paket tpak on tpak.id_paket = tp.id_paket where id_user = '$id_user' ";
 	}
 
 	$data = mysqli_query($koneksi, $sql);
