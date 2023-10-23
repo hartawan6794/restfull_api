@@ -372,7 +372,7 @@ function postRegister()
 	// Mulai transaksi
 	$koneksi->autocommit(FALSE);
 
-	$sqlInsertUser = "INSERT INTO tbl_user VALUES(null,'$email_user','$pass','$device_id','$token_notification','$telpon','1','$created_at',null)";
+	$sqlInsertUser = "INSERT INTO tbl_user VALUES(null,'$email_user','$pass','$device_id','$token_notification','$telpon','1')";
 
 	//cek email atau user
 	$sqlCekEmail = "SELECT email_user from tbl_user WHERE email_user = '$email_user'";
