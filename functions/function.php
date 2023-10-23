@@ -382,7 +382,7 @@ function postRegister()
 	if ($value == null) {
 		if ($koneksi->query($sqlInsertUser) === TRUE) {
 			$insert_id = $koneksi->insert_id;
-			$sqlInsertUserDetail = "INSERT INTO tbl_user_detail(id_user_detail,nm_user) VALUES($insert_id,'$nm_user')";
+			$sqlInsertUserDetail = "INSERT INTO tbl_user_detail(id_user_detail,nm_user,created_at) VALUES($insert_id,'$nm_user',$created_at)";
 			if ($koneksi->query($sqlInsertUserDetail) === TRUE) {
 				$koneksi->commit();
 				$response['status'] = true;
