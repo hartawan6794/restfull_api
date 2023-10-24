@@ -49,10 +49,18 @@ if ($access) {
 	} else if ($url === 'banner') {
 		if ($method === 'GET') get_banner();
 		else echo json_encode(array('message' => 'Not Found'));
-	}else {
+	} else {
 		http_response_code(404);
 		echo json_encode(array("message" => "Not Found"));
 	}
 } else {
-	echo json_encode(array('message' => 'Permission Denied'));
+	if ($url === 'callback') {
+		if ($method === 'POST') post_callback();
+		else echo json_encode(array('message' => 'Not Found'));
+	}else if ($url === 'callback') {
+		if ($method === 'POST') post_callback();
+		else echo json_encode(array('message' => 'Not Found'));
+	} else {
+		echo json_encode(array('message' => 'Permission Denied'));
+	}
 }
