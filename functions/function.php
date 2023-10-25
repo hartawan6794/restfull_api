@@ -484,8 +484,8 @@ function get_faq(){
 	} else {
 		$response['status'] = false;
 		$response['message'] = "Data gagal didapatkan";
+		$response['result'] = $value;
 	}
-
 
 	mysqli_close($koneksi);
 	echo json_encode($response);
