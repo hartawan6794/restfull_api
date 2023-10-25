@@ -49,6 +49,9 @@ if ($access) {
 	} else if ($url === 'banner') {
 		if ($method === 'GET') get_banner();
 		else echo json_encode(array('message' => 'Not Found'));
+	} else if ($url === 'faq') {
+		if ($method === 'GET') get_faq();
+		else echo json_encode(array('message' => 'Not Found'));
 	} else {
 		http_response_code(404);
 		echo json_encode(array("message" => "Not Found"));
