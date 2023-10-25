@@ -466,6 +466,31 @@ function get_banner()
 	echo json_encode($response);
 }
 
+function get_faq(){
+	global $koneksi;
+
+	$response = array();
+
+
+	$sql = "SELECT * FROM tbl_faq" ;
+
+	$data = mysqli_query($koneksi, $sql);
+	$value = mysqli_fetch_all($data, MYSQLI_ASSOC);
+
+	if ($value) {
+		$response['status'] = true;
+		$response['message'] = "Data berhasil didapatkan";
+		$response['result'] = $value;
+	} else {
+		$response['status'] = false;
+		$response['message'] = "Data gagal didapatkan";
+	}
+
+
+	mysqli_close($koneksi);
+	echo json_encode($response);
+}
+
 function post_callback(){
 	$apiKey = '1e69910d4338feaa6fcd80a86d21581c'; // API key anda
 	$merchantCode = isset($_POST['merchantCode']) ? $_POST['merchantCode'] : null; 
