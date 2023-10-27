@@ -533,3 +533,31 @@ function post_callback(){
 		throw new Exception('Bad Parameter');
 	}
 }
+
+function get_user(){
+	global $koneksi;
+	$response = array();
+
+	$id_user_detail = $_GET['id_user_detail'];
+
+	$sql = "SELECT * FROM tbl_user_detail WHERE id_user_detail = '$id_user_detail'";
+	$data = mysqli_query($koneksi, $sql);
+	$value = mysqli_fetch_all($data, MYSQLI_ASSOC);
+
+	if ($value) {
+		$response['status'] = true;
+		$response['message'] = "Data berhasil didapatkan";
+		$response['result'] = $value;
+	} else {
+		$response['status'] = false;
+		$response['message'] = "Data gagal didapatkan";
+		$response['result'] = $value;
+	}
+
+	mysqli_close($koneksi);
+	echo json_encode($response);
+}
+
+function post_user(){
+
+}
