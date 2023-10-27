@@ -52,7 +52,11 @@ if ($access) {
 	} else if ($url === 'faq') {
 		if ($method === 'GET') get_faq();
 		else echo json_encode(array('message' => 'Not Found'));
-	} else {
+	} else if ($url === 'user') {
+		if ($method === 'GET') get_user();
+		else if ($method === 'POST') post_user();
+		else echo json_encode(array('message' => 'Not Found'));
+	}else {
 		http_response_code(404);
 		echo json_encode(array("message" => "Not Found"));
 	}
@@ -63,7 +67,7 @@ if ($access) {
 	}else if ($url === 'callback') {
 		if ($method === 'POST') post_callback();
 		else echo json_encode(array('message' => 'Not Found'));
-	} else {
+	}else {
 		echo json_encode(array('message' => 'Permission Denied'));
 	}
 }
