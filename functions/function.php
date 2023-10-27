@@ -24,7 +24,7 @@ function getPaket()
 function upload($img)
 {
 	global $koneksi;
-	$target = "img/";
+	$target = "img/pelanggan/";
 	$response = array();
 
 	//memberikan izin file upload
@@ -40,7 +40,7 @@ function upload($img)
 	//mendapatkan ext image
 	$ext = explode('/', $img['type']);
 	//meberikan nama baru pada image yang ingin di upload
-	$nama_gambar = 'permohonan_' . $timestamp . '.' . $ext[1];
+	$nama_gambar = 'pelanggan_' . $timestamp . '.' . $ext[1];
 
 	//logika upload
 	if ($imageSize <= $maxFileSize) {
@@ -465,13 +465,14 @@ function get_banner()
 	echo json_encode($response);
 }
 
-function get_faq(){
+function get_faq()
+{
 	global $koneksi;
 
 	$response = array();
 
 
-	$sql = "SELECT * FROM tbl_faq" ;
+	$sql = "SELECT * FROM tbl_faq";
 
 	$data = mysqli_query($koneksi, $sql);
 	$value = mysqli_fetch_all($data, MYSQLI_ASSOC);
@@ -490,51 +491,47 @@ function get_faq(){
 	echo json_encode($response);
 }
 
-function post_callback(){
+function post_callback()
+{
 	$apiKey = '1e69910d4338feaa6fcd80a86d21581c'; // API key anda
-	$merchantCode = isset($_POST['merchantCode']) ? $_POST['merchantCode'] : null; 
-	$amount = isset($_POST['amount']) ? $_POST['amount'] : null; 
-	$merchantOrderId = isset($_POST['merchantOrderId']) ? $_POST['merchantOrderId'] : null; 
-	$productDetail = isset($_POST['productDetail']) ? $_POST['productDetail'] : null; 
-	$additionalParam = isset($_POST['additionalParam']) ? $_POST['additionalParam'] : null; 
-	$paymentMethod = isset($_POST['paymentCode']) ? $_POST['paymentCode'] : null; 
-	$resultCode = isset($_POST['resultCode']) ? $_POST['resultCode'] : null; 
-	$merchantUserId = isset($_POST['merchantUserId']) ? $_POST['merchantUserId'] : null; 
-	$reference = isset($_POST['reference']) ? $_POST['reference'] : null; 
-	$signature = isset($_POST['signature']) ? $_POST['signature'] : null; 
-	$publisherOrderId = isset($_POST['publisherOrderId']) ? $_POST['publisherOrderId'] : null; 
-	$spUserHash = isset($_POST['spUserHash']) ? $_POST['spUserHash'] : null; 
-	$settlementDate = isset($_POST['settlementDate']) ? $_POST['settlementDate'] : null; 
-	$issuerCode = isset($_POST['issuerCode']) ? $_POST['issuerCode'] : null; 
-	
+	$merchantCode = isset($_POST['merchantCode']) ? $_POST['merchantCode'] : null;
+	$amount = isset($_POST['amount']) ? $_POST['amount'] : null;
+	$merchantOrderId = isset($_POST['merchantOrderId']) ? $_POST['merchantOrderId'] : null;
+	$productDetail = isset($_POST['productDetail']) ? $_POST['productDetail'] : null;
+	$additionalParam = isset($_POST['additionalParam']) ? $_POST['additionalParam'] : null;
+	$paymentMethod = isset($_POST['paymentCode']) ? $_POST['paymentCode'] : null;
+	$resultCode = isset($_POST['resultCode']) ? $_POST['resultCode'] : null;
+	$merchantUserId = isset($_POST['merchantUserId']) ? $_POST['merchantUserId'] : null;
+	$reference = isset($_POST['reference']) ? $_POST['reference'] : null;
+	$signature = isset($_POST['signature']) ? $_POST['signature'] : null;
+	$publisherOrderId = isset($_POST['publisherOrderId']) ? $_POST['publisherOrderId'] : null;
+	$spUserHash = isset($_POST['spUserHash']) ? $_POST['spUserHash'] : null;
+	$settlementDate = isset($_POST['settlementDate']) ? $_POST['settlementDate'] : null;
+	$issuerCode = isset($_POST['issuerCode']) ? $_POST['issuerCode'] : null;
+
 	//log callback untuk debug 
 	// file_put_contents('callback.txt', "* Callback *\r\n", FILE_APPEND | LOCK_EX);
-	
-	if(!empty($merchantCode) && !empty($amount) && !empty($merchantOrderId) && !empty($signature))
-	{
+
+	if (!empty($merchantCode) && !empty($amount) && !empty($merchantOrderId) && !empty($signature)) {
 		$params = $merchantCode . $amount . $merchantOrderId . $apiKey;
 		$calcSignature = md5($params);
-	
-		if($signature == $calcSignature)
-		{
+
+		if ($signature == $calcSignature) {
 			//Callback tervalidasi
 			//Silahkan rubah status transaksi anda disini
 			file_put_contents('callback.txt', "* Success *\r\n\r\n", FILE_APPEND | LOCK_EX);
-		}
-		else
-		{
+		} else {
 			// file_put_contents('callback.txt', "* Bad Signature *\r\n\r\n", FILE_APPEND | LOCK_EX);
 			throw new Exception('Bad Signature');
 		}
-	}
-	else
-	{
+	} else {
 		// file_put_contents('callback.txt', "* Bad Parameter *\r\n\r\n", FILE_APPEND | LOCK_EX);
 		throw new Exception('Bad Parameter');
 	}
 }
 
-function get_user(){
+function get_user()
+{
 	global $koneksi;
 	$response = array();
 
@@ -558,6 +555,82 @@ function get_user(){
 	echo json_encode($response);
 }
 
-function post_user(){
+function post_user()
+{
 
+	global $koneksi;
+	$response = array();
+
+	$target = "img/user/";
+
+	$id_user_detail = $_POST['id_user_detail'] ? $_POST['id_user_detail'] : '';
+	$nik = $_POST['nik'] ? $_POST['nik'] : '';
+	$nm_user = $_POST['nm_user'] ? $_POST['nm_user'] : '';
+	$tgl_lahir = $_POST['tgl_lahir'] ? $_POST['tgl_lahir'] : '';
+	$tmp_lahir = $_POST['tmp_lahir'] ? $_POST['tmp_lahir'] : '';
+	$jns_kelamin = $_POST['jns_kelamin'] ? $_POST['jns_kelamin'] : '';
+	$updated_at = date('Y-m-d H:i:s');
+	$img = $_FILES['img'];
+	$nama_gambar = '';
+
+	if ($img != null) {
+		//memberikan izin file upload
+		$allowedFormats = ['image/jpeg', 'image/png'];
+		//tentukan ukuran max file
+		$maxFileSize = 2 * 1024 * 1024; // 2 MB
+		// Mendapatkan timestamp saat ini
+		$timestamp = time();
+
+		$sumber = $img['tmp_name'];
+		//mendapatkan ukuran image
+		$imageSize = $img['size'];
+		//mendapatkan ext image
+		$ext = explode('/', $img['type']);
+		//meberikan nama baru pada image yang ingin di upload
+		$nama_gambar = 'user_' . $timestamp . '.' . $ext[1];
+		//logika upload
+		$sql = "UPDATE tbl_user_detail SET nik = '$nik', nm_user = '$nm_user', tgl_lahir = '$tgl_lahir', tmp_lahir = '$tmp_lahir', updated_at = '$updated_at', jns_kelamin = '$jns_kelamin', img_user = '$nama_gambar' WHERE id_user_detail = '$id_user_detail'";
+		if ($imageSize <= $maxFileSize) {
+			if (in_array($img['type'], $allowedFormats)) {
+				$sqlDataImg = "SELECT img_user FROM tbl_user_detail WHERE id_user_detail='$id_user_detail'";
+				$data = mysqli_query($koneksi, $sqlDataImg);
+				$value = mysqli_fetch_all($data, MYSQLI_ASSOC);
+				if (move_uploaded_file($sumber, $target . $nama_gambar)) {
+					if($sqlDataImg){
+						unlink($target.$value[0]['img_user']);
+					}
+					if ($koneksi->query($sql) === TRUE) {
+						$response['status'] = true;
+						$response['message'] = 'Berhasil ubah data profile';
+					} else {
+						$response['status'] = true;
+						$response['message'] = 'Gagal ubah data profile';
+					}
+				} else {
+					$response['status'] = false;
+					$response['message'] = 'Gagal upload photo profile hubungi admin';
+				}
+			} else {
+				$response['status'] = false;
+				$response['message'] = 'Gambar yang di upload harus berupa png atau jpeg';
+			}
+		} else {
+			$response['status'] = false;
+			$response['message'] = 'File yang di upload harus kurang dari 2MB';
+		}
+	} else {
+		$sql = "UPDATE tbl_user_detail SET nik = '$nik', nm_user = '$nm_user', tgl_lahir = '$tgl_lahir', tmp_lahir = '$tmp_lahir', updated_at = '$updated_at', jns_kelamin = '$jns_kelamin' WHERE id_user_detail = '$id_user_detail'";
+
+		if ($koneksi->query($sql) === TRUE) {
+			$response['status'] = true;
+			$response['message'] = 'Berhasil ubah data profile';
+		} else {
+			$response['status'] = true;
+			$response['message'] = 'Gagal ubah data profile';
+		}
+	}
+
+
+	mysqli_close($koneksi);
+	echo json_encode($response);
 }
