@@ -40,7 +40,10 @@ if ($access) {
 	} else if ($url === 'pembayaran') {
 		if ($method === 'GET') getPembayaran();
 		else echo json_encode(array('message' => 'Not Found'));
-	} else if ($url === 'login') {
+	}else if ($url === 'pembayaranInvoice') {
+		if ($method === 'GET') getPembayaranInvoice();
+		else echo json_encode(array('message' => 'Not Found'));
+	}else if ($url === 'login') {
 		if ($method === 'POST') postLogin();
 		else echo json_encode(array('message' => 'Not Found'));
 	} else if ($url === 'register') {

@@ -313,6 +313,32 @@ function getPembayaran()
 	echo json_encode($response);
 }
 
+function getPembayaranInvoice(){
+	global $koneksi;
+
+	$response = array();
+
+	$invoice = $_GET['invoice'];
+
+	$sql = "SELECT invoice,pembayaran,tp.created_at,nm_paket,jns_pembayaran,nm_user,telpon FROM tbl_pembayaran tp INNER JOIN tbl_paket tpaket on tp.id_paket = tpaket.id_paket inner join tbl_pelanggan tpeh on tp.id_pelanggan = tpeh.id_pelanggan 
+		where tp.invoice = '$invoice'";
+
+
+	$data = mysqli_query($koneksi, $sql);
+	$value = mysqli_fetch_all($data, MYSQLI_ASSOC);
+
+	if ($value) {
+		$response['status'] = true;
+		$response['message'] = "Data berhasil didapatkan";
+		$response['result'] = $value;
+	} else {
+		$response['status'] = false;
+		$response['message'] = "Data gagal didapatkan";
+		$response['result'] = $value;
+	}
+	mysqli_close($koneksi);
+	echo json_encode($response);
+}
 function postLogin()
 {
 
@@ -728,7 +754,7 @@ function get_data_tagihan(){
 	$response = array();
 	$id_user = $_GET['id_user'];
 
-	$sql = "SELECT id_tagihan,tpem.invoice,nm_user,nm_paket,jatuh_tempo,periode,pembayaran FROM tbl_tagihan ttag INNER JOIN tbl_pelanggan tpel on ttag.id_pelanggan = tpel.id_pelanggan INNER JOIN tbl_user tu ON tu.id_user = ttag.id_user INNER JOIN tbl_paket tpak ON tpak.id_paket = ttag.id_paket INNER JOIN tbl_periode tper ON ttag.id_periode = tper.id_periode INNER JOIN tbl_pembayaran tpem ON ttag.invoice = tpem.invoice AND tpem.status < 1 WHERE tu.id_user = '$id_user'";
+	$sql = "SELECT id_tagihan,tpem.invoice,keterangan,nm_user,nm_paket,jatuh_tempo,periode,pembayaran FROM tbl_tagihan ttag INNER JOIN tbl_pelanggan tpel on ttag.id_pelanggan = tpel.id_pelanggan INNER JOIN tbl_user tu ON tu.id_user = ttag.id_user INNER JOIN tbl_paket tpak ON tpak.id_paket = ttag.id_paket INNER JOIN tbl_periode tper ON ttag.id_periode = tper.id_periode INNER JOIN tbl_pembayaran tpem ON ttag.invoice = tpem.invoice AND tpem.status < 1 WHERE tu.id_user = '$id_user'";
 	
 	$data = mysqli_query($koneksi, $sql);
 	$value = mysqli_fetch_all($data, MYSQLI_ASSOC);
