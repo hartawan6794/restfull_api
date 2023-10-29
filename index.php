@@ -22,6 +22,9 @@ if ($access) {
 		if ($method === 'POST') insertPermohonan();
 		else if ($method === 'GET') getPermohonan();
 		else echo json_encode(array("message" => "Not Found"));
+	} else if ($url === 'batal') {
+		if ($method === 'POST') batal_pelanggan();
+		else echo json_encode(array("message" => "Not Found"));
 	} else if ($url === 'tokenFcm') {
 		if ($method === 'POST') postToken();
 		else if ($method === 'GET') getToken();
@@ -59,6 +62,9 @@ if ($access) {
 	}else if($url === 'forgot'){
 		if($method === 'GET') get_check_email();
 		else if($method === 'POST') post_reset_password();
+		else echo json_encode(array('message'=> 'Not Found'));
+	}else if($url === 'tagian'){
+		if($method === 'GET') get_data_tagihan();
 		else echo json_encode(array('message'=> 'Not Found'));
 	}else {
 		http_response_code(404);

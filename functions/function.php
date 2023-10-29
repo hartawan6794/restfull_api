@@ -697,3 +697,53 @@ function post_reset_password()
 	mysqli_close($koneksi);
 	echo json_encode($response);
 }
+
+function batal_pelanggan(){
+
+	global $koneksi;
+
+	$response = array();
+
+	$requestPayload = file_get_contents("php://input");
+	$data = json_decode($requestPayload, true);
+
+	$id_pelanggan = $data['id_pelanggan'];
+
+	$sql = "DELETE FROM tbl_pelanggan WHERE id_pelanggan = '$id_pelanggan'";
+
+	if ($koneksi->query($sql)) {
+		$response["status"] = true;
+		$response["message"] = "Berhasil membatalkan langganan";
+	} else {
+		$response["status"] = false;
+		$response["message"] = "Terjadi error hubungi admin";
+	}
+
+	mysqli_close($koneksi);
+	echo json_encode($response);
+}
+
+function get_data_tagihan(){
+	global $koneksi;
+	$response = array();
+	$id_user = $_GET['id_user'];
+
+	$sql = "SELECT id_tagihan,tpem.invoice,nm_user,nm_paket,jatuh_tempo,periode FROM tbl_tagihan ttag INNER JOIN tbl_pelanggan tpel on ttag.id_pelanggan = tpel.id_pelanggan INNER JOIN tbl_user tu ON tu.id_user = ttag.id_user INNER JOIN tbl_paket tpak ON tpak.id_paket = ttag.id_paket INNER JOIN tbl_periode tper ON ttag.id_periode = tper.id_periode INNER JOIN tbl_pembayaran tpem ON ttag.invoice = tpem.invoice AND tpem.status < 1 WHERE tu.id_user = '$id_user'";
+	
+	$data = mysqli_query($koneksi, $sql);
+	$value = mysqli_fetch_all($data, MYSQLI_ASSOC);
+	
+	if ($value) {
+		$response["status"] = true;
+		$response["message"] = "Berhasil mendapatkan data";
+		$response['result'] = $value;
+	} else {
+		$response["status"] = false;
+		$response["message"] = "Gagal mendapatkan data";
+		$response['result'] = $value;
+	}
+
+	mysqli_close($koneksi);
+	echo json_encode($response);
+	
+}
