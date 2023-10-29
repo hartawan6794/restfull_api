@@ -313,7 +313,7 @@ function getPembayaran()
 	echo json_encode($response);
 }
 
-function getLogin()
+function postLogin()
 {
 
 	global $koneksi;
@@ -324,6 +324,7 @@ function getLogin()
 
 	$email_user = $data['email'];
 	$pass = $data['password'];
+	$token = $data['token_notification'];
 	// var_dump($email_user);die;
 	//$pass_hash = password_hash($pass, PASSWORD_BCRYPT);
 	$sql = "SELECT id_user,emaiL_user,tu.password,tud.nm_user as device_id FROM tbl_user tu inner join tbl_user_detail tud on tu.id_user = tud.id_user_detail 
@@ -331,11 +332,19 @@ function getLogin()
 	$data = mysqli_query($koneksi, $sql);
 	$value = mysqli_fetch_all($data, MYSQLI_ASSOC);
 
+	$id_user = $value[0]['id_user'];
+
 	if ($value) {
 		if ((password_verify($pass, $value[0]['password']))) {
-			$response['status'] = true;
-			$response['message'] = "Data berhasil didapatkan";
-			$response['result'] = $value;
+			$sqlUpdate = "UPDATE tbl_user SET token_notification = '$token' WHERE id_user='$id_user'";
+			if ($koneksi->query($sqlUpdate)) {
+				$response['status'] = true;
+				$response['message'] = "Data berhasil didapatkan";
+				$response['result'] = $value;
+			} else {
+				$response['status'] = false;
+				$response['message'] = "Gagal update FCM token";
+			}
 		} else {
 			$response['status'] = false;
 			$response['message'] = "Kata sandi yang anda masukan salah";
@@ -596,8 +605,8 @@ function post_user()
 				$data = mysqli_query($koneksi, $sqlDataImg);
 				$value = mysqli_fetch_all($data, MYSQLI_ASSOC);
 				if (move_uploaded_file($sumber, $target . $nama_gambar)) {
-					if($sqlDataImg){
-						unlink($target.$value[0]['img_user']);
+					if ($sqlDataImg) {
+						unlink($target . $value[0]['img_user']);
 					}
 					if ($koneksi->query($sql) === TRUE) {
 						$response['status'] = true;
@@ -635,7 +644,8 @@ function post_user()
 	echo json_encode($response);
 }
 
-function get_check_email(){
+function get_check_email()
+{
 
 	global $koneksi;
 
@@ -646,13 +656,13 @@ function get_check_email(){
 	$sql = "SELECT * FROM tbl_user WHERE email_user = '$email'";
 
 	$data = mysqli_query($koneksi, $sql);
-	$value = mysqli_fetch_all( $data, MYSQLI_ASSOC);
+	$value = mysqli_fetch_all($data, MYSQLI_ASSOC);
 
-	if($value) {
+	if ($value) {
 		$response["status"] = true;
 		$response["message"] = "Berhasil mendapatkan data";
 		$response['result'] = $value;
-	}else{
+	} else {
 		$response["status"] = false;
 		$response["message"] = "Gagal mendapatkan data";
 		$response['result'] = $value;
@@ -663,7 +673,8 @@ function get_check_email(){
 }
 
 
-function post_reset_password(){
+function post_reset_password()
+{
 	global $koneksi;
 	$response = array();
 
@@ -671,14 +682,14 @@ function post_reset_password(){
 	$data = json_decode($requestPayload, true);
 
 	$id_user = $data['id_user'];
-	$pass = password_hash($data['password'],PASSWORD_BCRYPT);
+	$pass = password_hash($data['password'], PASSWORD_BCRYPT);
 
 	$sql = "UPDATE tbl_user SET password = '$pass' WHERE id_user = '$id_user'";
 
-	if($koneksi->query($sql)){
+	if ($koneksi->query($sql)) {
 		$response["status"] = true;
 		$response["message"] = "Berhasil update password";
-	}else{
+	} else {
 		$response["status"] = false;
 		$response["message"] = "Gagal update password";
 	}

@@ -38,7 +38,7 @@ if ($access) {
 		if ($method === 'GET') getPembayaran();
 		else echo json_encode(array('message' => 'Not Found'));
 	} else if ($url === 'login') {
-		if ($method === 'POST') getLogin();
+		if ($method === 'POST') postLogin();
 		else echo json_encode(array('message' => 'Not Found'));
 	} else if ($url === 'register') {
 		if ($method === 'POST') postRegister();
