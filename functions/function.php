@@ -754,7 +754,7 @@ function get_data_tagihan(){
 	$response = array();
 	$id_user = $_GET['id_user'];
 
-	$sql = "SELECT id_tagihan,tpem.invoice,keterangan,nm_user,nm_paket,jatuh_tempo,periode,pembayaran FROM tbl_tagihan ttag INNER JOIN tbl_pelanggan tpel on ttag.id_pelanggan = tpel.id_pelanggan INNER JOIN tbl_user tu ON tu.id_user = ttag.id_user INNER JOIN tbl_paket tpak ON tpak.id_paket = ttag.id_paket INNER JOIN tbl_periode tper ON ttag.id_periode = tper.id_periode INNER JOIN tbl_pembayaran tpem ON ttag.invoice = tpem.invoice AND tpem.status < 1 WHERE tu.id_user = '$id_user'";
+	$sql = "SELECT id_tagihan,tpem.invoice,keterangan,nm_user,nm_paket,jatuh_tempo,periode,pembayaran FROM tbl_tagihan ttag INNER JOIN tbl_pelanggan tpel on ttag.id_pelanggan = tpel.id_pelanggan INNER JOIN tbl_user tu ON tu.id_user = ttag.id_user INNER JOIN tbl_paket tpak ON tpak.id_paket = ttag.id_paket INNER JOIN tbl_periode tper ON ttag.id_periode = tper.id_periode INNER JOIN tbl_pembayaran tpem ON ttag.invoice = tpem.invoice AND tpem.status < 1 WHERE tu.id_user = '$id_user' ORDER by id_tagihan DESC";
 	
 	$data = mysqli_query($koneksi, $sql);
 	$value = mysqli_fetch_all($data, MYSQLI_ASSOC);
