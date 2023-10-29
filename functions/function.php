@@ -643,7 +643,7 @@ function get_check_email(){
 
 	$email = $_GET['email'];
 
-	$sql = "SELECT id_user FROM tbl_user WHERE email_user = '$email'";
+	$sql = "SELECT * FROM tbl_user WHERE email_user = '$email'";
 
 	$data = mysqli_query($koneksi, $sql);
 	$value = mysqli_fetch_all( $data, MYSQLI_ASSOC);
