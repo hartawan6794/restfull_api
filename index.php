@@ -56,6 +56,10 @@ if ($access) {
 		if ($method === 'GET') get_user();
 		else if ($method === 'POST') post_user();
 		else echo json_encode(array('message' => 'Not Found'));
+	}else if($url === 'forgot'){
+		if($method === 'GET') get_check_email();
+		else if($method === 'POST') post_reset_password();
+		else echo json_encode(array('message'=> 'Not Found'));
 	}else {
 		http_response_code(404);
 		echo json_encode(array("message" => "Not Found"));

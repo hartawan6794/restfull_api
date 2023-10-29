@@ -634,3 +634,55 @@ function post_user()
 	mysqli_close($koneksi);
 	echo json_encode($response);
 }
+
+function get_check_email(){
+
+	global $koneksi;
+
+	$response = array();
+
+	$email = $_GET['email'];
+
+	$sql = "SELECT id_user FROM tbl_user WHERE email_user = '$email'";
+
+	$data = mysqli_query($koneksi, $sql);
+	$value = mysqli_fetch_all( $data, MYSQLI_ASSOC);
+
+	if($value) {
+		$response["status"] = true;
+		$response["message"] = "Berhasil mendapatkan data";
+		$response['result'] = $value;
+	}else{
+		$response["status"] = false;
+		$response["message"] = "Gagal mendapatkan data";
+		$response['result'] = $value;
+	}
+
+	mysqli_close($koneksi);
+	echo json_encode($response);
+}
+
+
+function post_reset_password(){
+	global $koneksi;
+	$response = array();
+
+	$requestPayload = file_get_contents('php://input');
+	$data = json_decode($requestPayload, true);
+
+	$id_user = $data['id_user'];
+	$pass = password_hash($data['password'],PASSWORD_BCRYPT);
+
+	$sql = "UPDATE tbl_user SET password = '$pass' WHERE id_user = '$id_user'";
+
+	if($koneksi->query($sql)){
+		$response["status"] = true;
+		$response["message"] = "Berhasil update password";
+	}else{
+		$response["status"] = false;
+		$response["message"] = "Gagal update password";
+	}
+
+	mysqli_close($koneksi);
+	echo json_encode($response);
+}
