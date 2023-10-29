@@ -63,7 +63,7 @@ if ($access) {
 		if($method === 'GET') get_check_email();
 		else if($method === 'POST') post_reset_password();
 		else echo json_encode(array('message'=> 'Not Found'));
-	}else if($url === 'tagian'){
+	}else if($url === 'tagihan'){
 		if($method === 'GET') get_data_tagihan();
 		else echo json_encode(array('message'=> 'Not Found'));
 	}else {
