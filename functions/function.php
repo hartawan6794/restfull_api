@@ -183,58 +183,6 @@ function getAlamat()
 	echo json_encode($response);
 }
 
-function postToken()
-{
-	$id_user = $_POST['id_user'];
-	$token = $_POST['token'];
-
-	global $koneksi;
-
-	$sql = "UPDATE tbl_user SET token_notification = '$token' WHERE id_user = '$id_user'";
-	$cekData = "SELECT * from tbl_user where id_user = '$id_user'";
-	$data = mysqli_query($koneksi, $cekData);
-	$value = mysqli_fetch_assoc($data);
-	$response = array();
-
-	// var_dump($valu['token_notification']);die;
-	if ($value['token_notification'] != null || $value['token_notification'] != '') {
-		$response['status'] = true;
-		$response['message'] = "Berhasil mendapatkan token";
-	} else {
-		if ($koneksi->query($sql)) {
-			$response['status'] = true;
-			$response['message'] = "Token telah dibuat";
-		} else {
-			$response['status'] = false;
-			$response['message'] = "Token gagal dikirim";
-		}
-	}
-	mysqli_close($koneksi);
-	echo json_encode($response);
-}
-
-function getToken()
-{
-	$id_user = $_GET['id_user'];
-
-	global $koneksi;
-	$sql = "SELECT * FROM tbl_user WHERE id_user= '$id_user'";
-	$data = mysqli_query($koneksi, $sql);
-	$value = mysqli_fetch_all($data, MYSQL_ASSOC);
-
-	$response = array();
-
-	if ($value) {
-		$response['status'] = true;
-		$response['message'] = "Data berhasil didapatkan";
-	} else {
-		$response['status'] = false;
-		$response['message'] = "Data gagal didapatkan";
-	}
-	mysqli_close($koneksi);
-	echo json_encode($response);
-}
-
 function updatePesanTerbaca()
 {
 	global $koneksi;
@@ -481,7 +429,7 @@ function get_banner()
 	$response = array();
 
 
-	$sql = "SELECT * FROM tbl_banner_informasi limit 4";
+	$sql = "SELECT * FROM tbl_banner_informasi limit 8";
 
 	$data = mysqli_query($koneksi, $sql);
 	$value = mysqli_fetch_all($data, MYSQLI_ASSOC);

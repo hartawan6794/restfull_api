@@ -25,11 +25,7 @@ if ($access) {
 	} else if ($url === 'batal') {
 		if ($method === 'POST') batal_pelanggan();
 		else echo json_encode(array("message" => "Not Found"));
-	} else if ($url === 'tokenFcm') {
-		if ($method === 'POST') postToken();
-		else if ($method === 'GET') getToken();
-		else echo json_encode(array("message" => "Not Found"));
-	} else if ($url === 'alamat') {
+	}else if ($url === 'alamat') {
 		if ($method === 'POST') postAlamat();
 		else if ($method === 'GET') getAlamat();
 		else echo json_encode(array("message" => "Not Found"));
